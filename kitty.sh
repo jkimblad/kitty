@@ -35,14 +35,18 @@ copy_templates() {
 
 }
 
-
-
+# Print an error and then exit unsuccesfully
 die() {
     echo "$1"
     exit 1
 }
 
 MAKEFILE_TEMPLATE="
+all: 
+    ${CXX} -o $PROJECT_NAME main.cpp
+
+run: all
+    $PROJECT_NAME
 
 "
 
