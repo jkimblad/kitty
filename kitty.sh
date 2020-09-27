@@ -3,6 +3,7 @@
 PROJECT_NAME="NULL"
 
 main() {
+	echo "$PROJECT_NAME"
 	PROJECT_NAME="$1"
 	create_directory
 	fetch_problem
@@ -29,8 +30,10 @@ fetch_problem() {
 }
 
 copy_templates() {
+	# Parse templates to update variables
+	parse_templates
 	echo "$MAKEFILE_TEMPLATE" > Makefile
-	echo "$MAIN_TEMPMLATE" > main.cpp
+	echo "$MAIN_TEMPLATE" > main.cpp
 
 }
 
@@ -40,12 +43,15 @@ die() {
 	exit 1
 }
 
+# Update templates with latest variables
+parse_templates() {
+
 MAKEFILE_TEMPLATE="
 all: 
 	${CXX} -o $PROJECT_NAME main.cpp
 
 run: all
-	$PROJECT_NAME
+	./$PROJECT_NAME
 
 "
 
@@ -56,5 +62,7 @@ int main() {
 return 0;
 }
 "
+
+}
 
 main "$@"
