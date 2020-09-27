@@ -29,8 +29,11 @@ fetch_problem() {
     fi
 }
 
-echo "$MAKEFILE_TEMPLATE" > Makefile
-echo "$MAIN_TEMPMLATE" > main.cpp
+copy_templates() {
+    echo "$MAKEFILE_TEMPLATE" > Makefile
+    echo "$MAIN_TEMPMLATE" > main.cpp
+
+}
 
 
 
