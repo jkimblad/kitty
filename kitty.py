@@ -87,8 +87,26 @@ all:
 run: all
 	./""" + problem_name + """
 
-tests: all
-	output=$(echo tests/input_0.txt | ./""" + problem_name + """)
+define run_tests =
+num_of_tests=$(expr $(ls -l | wc -l) / 2)
+current_test=0
+
+while [[ "$current_test" != "$num_of_tests" ]]; do
+    echo "Running test case $current_test"
+    output=$(cat tests/input_"$current_test".txt | ./""" + problem_name + """)
+    if [[ $output == $(cat tests/output_"$current_test".txt) ]]; then
+	echo "[PASS]"
+    else
+	echo "[FAIL]"
+    fi
+
+    current_test=$(($current_test + 1))
+done
+
+endef
+
+tests: all ; @$(value run_tests)
+.ONESHELL:
 
 
 
