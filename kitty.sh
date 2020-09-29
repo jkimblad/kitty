@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 PROJECT_NAME="NULL"
+NUM_EXAMPLES=0
 
 main() {
 	PROJECT_NAME="$1"
@@ -12,10 +13,30 @@ main() {
 }
 
 chomp_open() {
-    
+    chomp=$(echo "$1" | sed '/<pre>/q')
+    chomp_length=${#chomp}
+    remainder=${1:chomp_length}
+
+
+    # Return remainder
+    echo "$remainder"
 }
 
 chomp_close() {
+    chomp=$(echo "$1" | sed '/<\/pre>/q')
+    chomp_length=${#chomp}
+    remainder=${1:chomp_length}
+
+    # Save as example input 
+    if [[ "$2" == "input" ]]; then
+	echo "$chomp" > "tests/input_$3.txt"
+    elif [[ "$2" == "output" ]]; then
+	# Save as example output
+	echo "$chomp" > "tests/output_$3.txt"
+
+    fi
+
+    echo "$remainder"
 
 }
 
@@ -23,16 +44,15 @@ chomp_close() {
 parse_input_output() {
     input_output=$(sed -n -e '/<pre>/,/<\/pre>/ p' "$PROJECT_NAME.html")
 
-    #echo "$input_output"
-    input=$(echo "$input_output" | sed '/<\/pre>/q')
-    #echo "$input"
-    #input_output=${input#"$input_output"}
-    #echo "$input_output"
-
-
-    length=${#input}
-    echo "${input_output:length}"
-    
+    example_num=0
+    while [[ ! -z "$input_output" ]]; do
+	# Save input
+	$input_output=$(chomp_open "$input_output")
+	$input_output=$(chomp_close "$input_output" input $example_num)
+	# Save output
+	$input_output=$(chomp_open "$input_output")
+	$input_output=$(chomp_close "$input_output" "output" $example_num)
+    done
 
 }
 
@@ -42,6 +62,7 @@ create_directory() {
 		die "Project directory already exists, exiting"
 	fi
 	mkdir "$PROJECT_NAME" && cd "$PROJECT_NAME"
+	mkdir "tests"
 }
 
 
