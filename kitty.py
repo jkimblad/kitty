@@ -79,15 +79,24 @@ def copy_templates(problem_name):
 
 def populate_tempates(problem_name):
     makefile_template = """
+SHELL := /bin/bash
+
 all: 
 	${CXX} -o """ + problem_name +  """ main.cpp
 
 run: all
 	./""" + problem_name + """
 
+tests: all
+	output=$(echo tests/input_0.txt | ./""" + problem_name + """)
+
+
+
 """
 
     maincpp_template = """
+#include <iostream>
+
 int main() {
 
 
