@@ -8,7 +8,12 @@ from html.parser import HTMLParser
 
 
 def main():
-    problem_name = str(sys.argv[1])
+    if sys.argv[1]:
+        problem_name = str(sys.argv[1])
+    else
+        print("Usage: kitty {problem_name}")
+        exit()
+
     create_directories(problem_name)
     problem_html = fetch_problem(problem_name)
     parse_testcases(problem_html, problem_name)
