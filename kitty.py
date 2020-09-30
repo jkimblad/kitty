@@ -8,11 +8,11 @@ from html.parser import HTMLParser
 
 
 def main():
-    if sys.argv[1]:
-        problem_name = str(sys.argv[1])
-    else:
-        print("Usage: kitty {problem_name}")
+    if len(sys.argv) < 2:
+        print("Usage: kitty [problem_name]")
         exit()
+
+    problem_name = str(sys.argv[1])
 
     create_directories(problem_name)
     problem_html = fetch_problem(problem_name)
