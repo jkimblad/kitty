@@ -10,7 +10,7 @@ from html.parser import HTMLParser
 def main():
     if sys.argv[1]:
         problem_name = str(sys.argv[1])
-    else
+    else:
         print("Usage: kitty {problem_name}")
         exit()
 
@@ -49,20 +49,18 @@ def parse_testcases(problem_html, problem_name):
 
         def handle_data(self, data):
             if self.is_example:
+
                 # Is input example
                 if self.is_input:
                     filename = problem_name + "/tests/input_" + str(self.example_counter) +".txt"
-                    example_file = open(filename, "w+")
-                    example_file.write(data)
-                    example_file.close()
-
                 else:
                     # Is output example
                     filename = problem_name + "/tests/output_" + str(self.example_counter) +".txt"
-                    example_file = open(filename, "w+")
-                    example_file.write(data)
-                    example_file.close()
                     self.example_counter += self.example_counter + 1
+
+                example_file = open(filename, "w+")
+                example_file.write(data)
+                example_file.close()
 
 
     parser = MyHTMLParser()
@@ -70,17 +68,21 @@ def parse_testcases(problem_html, problem_name):
 
 def copy_templates(problem_name):
 
-    (makefile_template, maincpp_template) = populate_tempates(problem_name)
+    templates = populate_tempates(problem_name)
+    files = [{
+        "filename" : "/Makefile",
+        "template" : templates[0]
+        },
+        {
+        "filename" : "/main.cpp",
+        "template" : templates[1]
+        }]
     
+    for file_template in files:
     # Create makefile from template
-    makefile = open(problem_name + "/Makefile", "w+")
-    makefile.write(makefile_template)
-    makefile.close()
-
-    # Create main.cpp from template
-    maincpp = open(problem_name + "/main.cpp", "w+")
-    maincpp.write(maincpp_template)
-    maincpp.close()
+        f = open(problem_name + file_template["filename"], "w+")
+        f.write(file_template["template"])
+        f.close()
 
 def populate_tempates(problem_name):
     makefile_template = """
@@ -126,7 +128,7 @@ int main() {
     return 0;
 }
 """
-    return (makefile_template, maincpp_template)
+    return [makefile_template, maincpp_template]
 
 
 if __name__ == "__main__":
