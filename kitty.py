@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# Copyright (c) 2020 Jacob Kimblad #
+
 import os
 import sys
 import requests
