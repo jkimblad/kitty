@@ -50,6 +50,7 @@ def parse_testcases(problem_html, problem_name):
                 self.is_example = False
 
         def handle_data(self, data):
+            print("Handling data" + data)
             if self.is_example:
 
                 # Is input example
@@ -97,16 +98,18 @@ run: all
 	./""" + problem_name + """
 
 define run_tests =
-num_of_tests=$(expr $(ls -l | wc -l) / 2)
+num_of_tests=$(expr $(ls tests | wc -l) / 2)
 current_test=0
 
 while [[ "$current_test" != "$num_of_tests" ]]; do
     echo "Running test case $current_test"
     output=$(cat tests/input_"$current_test".txt | ./""" + problem_name + """)
     if [[ $output == $(cat tests/output_"$current_test".txt) ]]; then
-	echo "[PASS]"
+        echo "[PASS]"
     else
-	echo "[FAIL]"
+        echo "[FAIL]"
+        echo "Your output:"
+        echo "$output"
     fi
 
     current_test=$(($current_test + 1))
